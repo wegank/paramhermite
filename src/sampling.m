@@ -59,7 +59,9 @@ end proc:
 
 classify:=proc(w,params,g:=params[-1])
     local gb,v,l,u,rpoints:
-    gb:=FGb[fgb_matrixn_radical2]([seq(diff(l*w-g,v), v in params)],[w,u-g],0,[l],[op(params),u],0,{"verb"=3}):
+    gb := Groebner:-Basis([seq(diff(l*w-g,v), v in params)], lexdeg([l],params));
+    gb := select(f -> not l in indets(f), gb);
+    gb := ListTools:-Reverse(Groebner:-Basis([op(gb),w,u-g], plex(op(params),u)));
     rpoints:=isol(gb[-1],u):
     return rpoints:
 end proc:
